@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Validador de Llaves</title>
+    
+    <!-- Importación de Poppins desde Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Barra lateral fucsia -->
+    <div class="sidebar">
+        <div class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+
+    <!-- Contenido Principal -->
+    <main class="main-content">
+        <h1 class="title">Bienvenido</h1>
+
+        <div class="container">
+            <p class="instruction">Ingresa un texto en el espacio de aquí abajo usando "{}"</p>
+
+            <input 
+                type="text" 
+                id="textInput" 
+                class="custom-input" 
+                placeholder="Ej: {Hola} {me llamo {Mariana}}"
+            >
+
+            <p class="warning-text">
+                Ingresa tu texto aquí, OJO que si abres una '{' tiene que terminar en una '}'
+            </p>
+
+            <button id="validateBtn" class="btn-validate" onclick="validarTexto()">Validar texto</button>
+
+            <!-- Sección de Estado: Correcto -->
+            <div id="statusSuccess" class="status-box hidden">
+                <h2>¡Enhorabuena!</h2>
+                <p>Tu texto no tiene errores</p>
+                <img src="sonic_happy.png" alt="Personaje feliz" class="character-img">
+            </div>
+
+            <!-- Sección de Estado: Error -->
+            <div id="statusError" class="status-box hidden">
+                <h2>¡Upsss!</h2>
+                <p>Tu texto tiene errores, inténtalo de nuevo</p>
+                <img src="sonic_sad.png" alt="Personaje triste" class="character-img">
+            </div>
+
+            <!-- Sección de Estado: Campo Vacío -->
+            <div id="statusEmpty" class="status-box hidden">
+                <h2>¡Oyeee!</h2>
+                <p>Ingresa primero el texto para ver el resultado</p>
+                <img src="sonic_angry.png" alt="Personaje enojado" class="character-img">
+            </div>
+        </div>
+    </main>
+
+    <!-- Lógica en JS para la interacción web -->
+    <script>
+        function esSecuenciaValidaJS(texto) {
+            let pila = [];
+            let tieneLlaves = false; // Exige al menos un par de llaves
+
+            for (let i = 0; i < texto.length; i++) {
+                let c = texto.charAt(i);
+                if (c === '{') {
+                    pila.push(c);
+                    tieneLlaves = true;
+                } else if (c === '}') {
+                    if (pila.length === 0) return false;
+                    pila.pop();
+                    tieneLlaves = true;
+                }
+            }
+            
+            // Retorna true solo si la pila está vacía Y al menos ingresó una llave
+            return pila.length === 0 && tieneLlaves;
+        }
+
+        function validarTexto() {
+            // Ocultar todos los estados
+            document.getElementById('statusSuccess').classList.add('hidden');
+            document.getElementById('statusError').classList.add('hidden');
+            document.getElementById('statusEmpty').classList.add('hidden');
+
+            let entrada = document.getElementById('textInput').value;
+
+            // 1. Si está vacío
+            if (entrada.trim() === '') {
+                document.getElementById('statusEmpty').classList.remove('hidden');
+                return;
+            }
+
+            // 2. Validación de la secuencia
+            let esValido = esSecuenciaValidaJS(entrada);
+
+            if (esValido) {
+                document.getElementById('statusSuccess').classList.remove('hidden');
+            } else {
+                document.getElementById('statusError').classList.remove('hidden');
+            }
+        }
+    </script>
+</body>
+</html>
