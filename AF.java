@@ -2,7 +2,6 @@ import java.util.Scanner;
 
 public class AF {
 
-
     // 1. ESTRUCTURA DE DATOS DESDE CERO: PILA DE CARACTERES
     private static class PilaPropia {
         private char[] elementos;
@@ -34,14 +33,14 @@ public class AF {
         }
     }
 
-    // 2. MÉTODO OPTIMO PARA VALIDAR LAS LLAVES
+    // 2. MÉTODO ÓPTIMO PARA VALIDAR LAS LLAVES
     public static boolean esSecuenciaValida(String texto) {
         if (texto == null) {
             return false;
         }
 
-        // Creamos la pila con la capacidad del tamaño del texto
         PilaPropia pila = new PilaPropia(texto.length());
+        boolean tieneLlaves = false; // Exige al menos un par de llaves
 
         // Recorrido obligatorio usando charAt()
         for (int i = 0; i < texto.length(); i++) {
@@ -50,6 +49,7 @@ public class AF {
             // Si es llave que abre '{', se guarda en la pila
             if (caracter == '{') {
                 pila.push(caracter);
+                tieneLlaves = true;
             } 
             // Si es llave que cierra '}'
             else if (caracter == '}') {
@@ -59,12 +59,12 @@ public class AF {
                 }
                 // Sacamos la llave '{' que correspondía
                 pila.pop();
+                tieneLlaves = true;
             }
-            
         }
 
-        // Si al terminar la pila quedó completamente vacía, la secuencia es correcta
-        return pila.estaVacia();
+        // Es válido si la pila quedó vacía Y si contenía al menos alguna llave
+        return pila.estaVacia() && tieneLlaves;
     }
 
     // 3. MÉTODO MAIN (PRUEBAS EN CONSOLA)
