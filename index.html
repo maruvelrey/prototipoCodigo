@@ -66,20 +66,26 @@
         </div>
     </main>
 
-    <!-- Lógica en JS para simular el comportamiento en la web -->
+    <!-- Lógica en JS para la interacción web -->
     <script>
         function esSecuenciaValidaJS(texto) {
             let pila = [];
+            let tieneLlaves = false; // Exige al menos un par de llaves
+
             for (let i = 0; i < texto.length; i++) {
                 let c = texto.charAt(i);
                 if (c === '{') {
                     pila.push(c);
+                    tieneLlaves = true;
                 } else if (c === '}') {
                     if (pila.length === 0) return false;
                     pila.pop();
+                    tieneLlaves = true;
                 }
             }
-            return pila.length === 0;
+            
+            // Retorna true solo si la pila está vacía Y al menos ingresó una llave
+            return pila.length === 0 && tieneLlaves;
         }
 
         function validarTexto() {
